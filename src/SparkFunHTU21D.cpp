@@ -84,17 +84,21 @@ uint16_t HTU21D::readValue(byte cmd)
 //Calc humidity and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float HTU21D::readHumidity(void)
+int16_t HTU21D::readHumidity(void)
 {
   uint16_t rawHumidity = readValue(TRIGGER_HUMD_MEASURE_NOHOLD);
   
   if(rawHumidity == ERROR_I2C_TIMEOUT || rawHumidity == ERROR_BAD_CRC) return(rawHumidity);
 
-  //Given the raw humidity data, calculate the actual relative humidity
-  float tempRH = rawHumidity * (125.0 / 65536.0); //2^16 = 65536
-  float rh = tempRH - 6.0; //From page 14
+  // //Given the raw humidity data, calculate the actual relative humidity
+  // float tempRH = rawHumidity * (125.0 / 65536.0); //2^16 = 65536
+  // float rh = tempRH - 6.0; //From page 14
 
-  return (rh);
+  // return (rh);
+
+  //int rh = (-1200 + ((25000L * rawHumidity) / 65536L)) / 20;
+  int32_t rh = ((rawHumidity * 25000L) / 65536L) - 1200;
+  return((int16_t)(rh /20));  //*10
 }
 
 //Read the temperature
@@ -102,17 +106,21 @@ float HTU21D::readHumidity(void)
 //Calc temperature and return it to the user
 //Returns 998 if I2C timed out
 //Returns 999 if CRC is wrong
-float HTU21D::readTemperature(void)
+int16_t HTU21D::readTemperature(void)
 {
   uint16_t rawTemperature = readValue(TRIGGER_TEMP_MEASURE_NOHOLD);
 
   if(rawTemperature == ERROR_I2C_TIMEOUT || rawTemperature == ERROR_BAD_CRC) return(rawTemperature);
 
-  //Given the raw temperature data, calculate the actual temperature
-  float tempTemperature = rawTemperature * (175.72 / 65536.0); //2^16 = 65536
-  float realTemperature = tempTemperature - 46.85; //From page 14
+  // //Given the raw temperature data, calculate the actual temperature
+  // float tempTemperature = rawTemperature * (175.72 / 65536.0); //2^16 = 65536
+  // float realTemperature = tempTemperature - 46.85; //From page 14
 
-  return (realTemperature);
+  // return (realTemperature);
+
+  //int realTemperature = (-4685 + ((17572 * rawTemperature) / 65536L)) / 10;
+  int32_t realTemperature = ((rawTemperature * 17572L) / 65536L) - 4685;
+  return((int16_t)(realTemperature /10)); //*10
 }
 
 //Set sensor resolution

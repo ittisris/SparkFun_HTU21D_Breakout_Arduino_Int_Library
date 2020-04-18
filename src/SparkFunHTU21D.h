@@ -51,8 +51,8 @@ public:
 
   //Public Functions
   void begin(TwoWire &wirePort = Wire); //If user doesn't specificy then Wire will be used
-  float readHumidity(void);
-  float readTemperature(void);
+  int16_t readHumidity(void);
+  int16_t readTemperature(void);
   void setResolution(byte resBits);
 
   byte readUserRegister(void);
