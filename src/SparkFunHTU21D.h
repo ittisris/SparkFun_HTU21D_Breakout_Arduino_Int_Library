@@ -23,8 +23,8 @@
 
 #define HTU21D_ADDRESS 0x40  //Unshifted 7-bit I2C address for the sensor
 
-#define ERROR_I2C_TIMEOUT 	998
-#define ERROR_BAD_CRC		999
+#define ERROR_I2C_TIMEOUT 	9998
+#define ERROR_BAD_CRC		9999
 
 #define TRIGGER_TEMP_MEASURE_HOLD  0xE3
 #define TRIGGER_HUMD_MEASURE_HOLD  0xE5
